@@ -1,4 +1,4 @@
-export type TTransformedDictionaryOrder = { [key: number]: [price: number, size: number, total: number] }
+export type TTransformedDictionaryOrder = { [key: number]: { price: number, size: number, total: number } }
 export type TRawOrder = [price: number, size: number]
 export type TDictionaryOrder = { [key: number]: { price: number, size: number, timeStamp: Date } }
 
@@ -21,6 +21,18 @@ export interface ITransformedSocketData {
     asks: TTransformedDictionaryOrder
     ticker: string
     totalSize: number
+}
+
+export interface ISocketPresentation {
+    data: TTransformedDictionaryOrder
+    ticker: string
+    totalSize: number
+}
+
+export interface IUseWorker {
+    isLoading: boolean,
+    feedWorker: Worker | null,
+    orderBook: ITransformedSocketData | undefined
 }
 
 export enum messages {

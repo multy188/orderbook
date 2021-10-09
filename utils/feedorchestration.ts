@@ -148,7 +148,7 @@ export class FeedOrchestration {
         if (timeSubsequentOrderWasReceived > new Date(this.updatedDate.getTime() + THROTLE_TIME)) {
             // set new update time
             this.updatedDate = timeSubsequentOrderWasReceived;
-            postMessage({ type: messages.ORDER, data: this.transformedOrderStore }, '*');
+            postMessage({ type: messages.ORDER, data: this.transformedOrderStore });
         }
 
     }
@@ -169,8 +169,7 @@ export class FeedOrchestration {
         postMessage({
             type: messages.INITIAL_SNAPSHOT,
             data: this.transformedOrderStore
-        },
-            '*')
+        })
     }
 
     private transformRawOrder(asks: TRawOrder[], bids: TRawOrder[]) {
@@ -223,7 +222,7 @@ export class FeedOrchestration {
             this.feeds.send(JSON.stringify(unsubscribeMessage));
             // close socket
             this.feeds.close();
-            postMessage({ type: "CLOSE" }, '*');
+            postMessage({ type: "CLOSE" });
         } catch (e) {
             console.log(strings.ERROR);
             throw e;

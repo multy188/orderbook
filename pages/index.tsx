@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import { OrderBook } from '../components';
 
 const Home: NextPage = () => {
   return (
@@ -12,12 +13,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h4 className={styles.header}>
-          Order Book
-        </h4>
-
-
-
+        <OrderBook />
       </main>
     </div>
   )
