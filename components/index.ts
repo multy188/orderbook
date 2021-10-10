@@ -1,4 +1,4 @@
 export { OrderBook } from './order'
 export { Loading } from './loading'
-export { AskOrder } from './askorder'
+export { RowOrder } from './roworder'
 export { BidOrder } from './bidorder'

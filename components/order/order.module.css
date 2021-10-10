@@ -2,3 +2,29 @@
     border-bottom: 1px solid #777778;
     padding-bottom: 10px;
 }
+
+.orderBookTable {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    text-align: right;
+}
+
+.orderBook {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    height: 80vh;
+    width: 80%;
+}
+
+.heading {
+    font-weight: bolder;
+    color: #777778;
+}
+
+.head {
+    border-bottom: 0.1px solid #777778;
+    font-weight: bolder;
+    width: 100%;
+}

@@ -98,3 +98,16 @@ export const convertDictionaryOrderToArray = (dictionaryOrderData: TDictionaryOr
         })
     return rawOrderData;
 }
+
+/**
+ * 
+ * @param param0 
+ * @returns {Number}
+ */
+export const getColorPercentage = (totalSize: number, cumulativeTotalSize: number) => {
+    let percentageColor = (totalSize ? cumulativeTotalSize / cumulativeTotalSize : 0) * 100;
+    // Since percentage cant be less than 0 or greater than 100, i am  getting min and max
+    percentageColor = Math.min(percentageColor, 100);
+    percentageColor = Math.max(percentageColor, 0);
+    return percentageColor;
+}

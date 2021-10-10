@@ -35,6 +35,14 @@ export interface IUseWorker {
     orderBook: ITransformedSocketData | undefined
 }
 
+export interface IOrderRow {
+    size: number,
+    price: number,
+    cumulativeTotalSize: number,
+    totalSize: number,
+    color: string
+}
+
 export enum messages {
     "INITIAL_SNAPSHOT",
     "UNSUBSCRIBE",
