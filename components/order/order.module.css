@@ -4,27 +4,62 @@
 }
 
 .orderBookTable {
-    border-collapse: collapse;
-    table-layout: fixed;
+    color: white;
     width: 100%;
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .orderBook {
     display: flex;
     justify-content: center;
     flex-direction: row;
+    width: 100%;
+    overflow-y: auto;
     height: 80vh;
-    width: 80%;
+}
+
+.toggle {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+    max-height: 100px;
+}
+
+.toggleButton {
+    font-size: large;
+    padding: 10px;
+    background-color: rgb(117, 84, 174);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
 }
 
 .heading {
-    font-weight: bolder;
-    color: #777778;
+    font-weight: 400;
+    display: flex;
 }
 
 .head {
-    border-bottom: 0.1px solid #777778;
-    font-weight: bolder;
-    width: 100%;
+    border-bottom: 1px solid #777778;
+    font-weight: 200;
+    flex: 1;
+    text-align: left;
+}
+
+.rowBid {
+    display: flex;
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-image: linear-gradient(to right, rgb(31, 59, 31) 100%, rgb(31, 59, 31) 0%);
+}
+
+.rowAsk {
+    display: flex;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to left, rgb(137, 52, 52) 100%, rgb(137, 52, 52) 0%);
 }

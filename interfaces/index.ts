@@ -38,9 +38,7 @@ export interface IUseWorker {
 export interface IOrderRow {
     size: number,
     price: number,
-    cumulativeTotalSize: number,
-    totalSize: number,
-    color: string
+    cumulativeTotalSize: number
 }
 
 export enum messages {

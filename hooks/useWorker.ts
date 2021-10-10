@@ -27,7 +27,7 @@ export const useWorker = (): IUseWorker => {
         setLoading(false);
     }, [])
 
-    return (feedWorker && feedWorker.current && isLoading)
+    return (feedWorker && feedWorker.current && !isLoading)
         ? {
             isLoading,
             feedWorker: feedWorker.current,

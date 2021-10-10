@@ -23,29 +23,34 @@ import { TDictionaryOrder, TRawOrder, TTransformedDictionaryOrder } from '../int
  * @returns {TTransformedDictionaryOrder}
  */
 
-export const sortOrderAndCalculateTotal = (orderDictionary: TDictionaryOrder) => {
+export const sortOrderAndCalculateTotal = (orderDictionary: TDictionaryOrder, isAscending = true) => {
     let total = 0;
 
     // sort orders by price
-    const sortedOrderDictionary: TTransformedDictionaryOrder = Object.keys(orderDictionary)
+    let sortedOrder = Object.keys(orderDictionary)
         // Object.keys returns a string of Arrays so i need to pass it from String to float
         .map((key: string) => orderDictionary[parseFloat(key)])
-        .sort((a, b) => { return a.price - b.price })
+        .sort((a, b) => a.price - b.price)
         .filter((k) => k)
-        // calculate totals
-        .map((sortedData) => {
-            const { price, size } = sortedData
-            total += size
-            return {
-                price,
-                size,
-                total
-            }
-        })
+    if (!isAscending) {
+        sortedOrder = sortedOrder.reverse()
+    }
+
+
+    // calculate totals
+    const sortedOrderDictionary: TTransformedDictionaryOrder = sortedOrder.map((sortedData) => {
+        const { price, size } = sortedData
+        total += size
+        return {
+            price,
+            size,
+            total
+        }
+    })
         .reduce((allOrders, currentOrder) => {
             return {
-                ...allOrders,
                 [currentOrder.price]: currentOrder,
+                ...allOrders
             };
         }, {});
     return sortedOrderDictionary;
@@ -105,7 +110,7 @@ export const convertDictionaryOrderToArray = (dictionaryOrderData: TDictionaryOr
  * @returns {Number}
  */
 export const getColorPercentage = (totalSize: number, cumulativeTotalSize: number) => {
-    let percentageColor = (totalSize ? cumulativeTotalSize / cumulativeTotalSize : 0) * 100;
+    let percentageColor = (totalSize ? cumulativeTotalSize / totalSize : 0) * 100;
     // Since percentage cant be less than 0 or greater than 100, i am  getting min and max
     percentageColor = Math.min(percentageColor, 100);
     percentageColor = Math.max(percentageColor, 0);

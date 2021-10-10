@@ -9,6 +9,7 @@ onmessage = (event: MessageEvent) => {
             break
         }
         case messages.TOGGLE_FEED: {
+            console.log('didyou.................')
             feedOrchestration.toggleFeed(event.data.ticker);
             break
         }

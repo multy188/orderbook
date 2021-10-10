@@ -96,16 +96,17 @@ export class FeedOrchestration {
                 }
 
                 // if price exist in store but new size is 0, delete from store
-                else if (existingPriceInStore && size === 0) {
-                    delete this.orderStore.asks[floorPrice]
-                }
-
-                // Price exist and size is not zero, update store
-                else {
-                    this.orderStore.asks[floorPrice] = {
-                        price: floorPrice,
-                        size,
-                        timeStamp: timeSubsequentOrderWasReceived
+                else if (existingPriceInStore) {
+                    if (size === 0) {
+                        delete this.orderStore.asks[floorPrice]
+                    }
+                    // Price exist and size is not zero, update store
+                    else {
+                        this.orderStore.asks[floorPrice] = {
+                            price: floorPrice,
+                            size,
+                            timeStamp: timeSubsequentOrderWasReceived
+                        }
                     }
                 }
             });
@@ -128,18 +129,21 @@ export class FeedOrchestration {
                 }
 
                 // if price exist in store but new size is 0, delete from store
-                else if (existingPriceInStore && size === 0) {
-                    delete this.orderStore.bids[floorPrice]
-                }
-
-                // Price exist and size is not zero, update store
-                else {
-                    this.orderStore.bids[floorPrice] = {
-                        price: floorPrice,
-                        size,
-                        timeStamp: timeSubsequentOrderWasReceived
+                else if (existingPriceInStore) {
+                    if (size === 0) {
+                        delete this.orderStore.bids[floorPrice]
+                    }
+                    // Price exist and size is not zero, update store
+                    else {
+                        this.orderStore.bids[floorPrice] = {
+                            price: floorPrice,
+                            size,
+                            timeStamp: timeSubsequentOrderWasReceived
+                        }
                     }
                 }
+
+
             });
         }
         this.transformedOrderStore = this.transformRawOrder(convertDictionaryOrderToArray(this.orderStore.asks), convertDictionaryOrderToArray(this.orderStore.bids));
@@ -166,6 +170,7 @@ export class FeedOrchestration {
             bids: convertArrayOrderToDictionary(bids, this.updatedDate)
         }
         this.transformedOrderStore = this.transformRawOrder(asks, bids);
+        console.log('.....................................store: ', this.transformedOrderStore)
         postMessage({
             type: messages.INITIAL_SNAPSHOT,
             data: this.transformedOrderStore
@@ -181,12 +186,16 @@ export class FeedOrchestration {
             .map((orders) => orders[1])
             .reduce((totalOrderSize: number, currentOrderSize) => totalOrderSize + currentOrderSize);
 
+        let sortedAsks = asks.sort((a, b) => a[0] - b[0]);
+        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse();
+        console.log('???????????????????', sortedBids)
         const transformedData: ITransformedSocketData = {
             ticker: this.ticker,
             totalSize: newOrderMaxSize,
             asks: sortOrderAndCalculateTotal(convertArrayOrderToDictionary(asks, new Date())),
-            bids: sortOrderAndCalculateTotal(convertArrayOrderToDictionary(bids, new Date()))
+            bids: sortOrderAndCalculateTotal(convertArrayOrderToDictionary(sortedBids, new Date()), false)
         }
+        console.log('transformed comesfirst: ', transformedData)
         return transformedData;
     }
 
@@ -207,9 +216,9 @@ export class FeedOrchestration {
             feed: "book_ui_1",
             product_ids: [ticker],
         };
-        this.feeds.send(JSON.stringify(subscriptionMessage));
         //update new ticker
         this.ticker = ticker;
+        this.feeds.send(JSON.stringify(subscriptionMessage));
     }
 
     closeSocket() {

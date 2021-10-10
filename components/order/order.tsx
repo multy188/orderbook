@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useWorker } from '../../hooks'
 import { messages, TTransformedDictionaryOrder, ITransformedSocketData } from '../../interfaces'
-import { BITCOIN_TICKER, ETHEREUM_TICKER, ASK_COLOR, BID_COLOR } from '../../utils'
+import { BITCOIN_TICKER, ETHEREUM_TICKER, ASK_COLOR, BID_COLOR, getColorPercentage } from '../../utils'
 import { Loading, RowOrder } from '../'
 import styles from './order.module.css'
 
@@ -32,17 +32,14 @@ export const OrderBook = () => {
     if (!orderBook) {
         return null
     }
-
     const renderOrderRow = (orders: TTransformedDictionaryOrder, totalSize: number, color: string) => {
         return Object.keys(orders)
             .map((key) => {
                 const { total, price, size } = orders[parseFloat(key)];
                 return (
-                    <tr key={`${price}-${color}`} >
+                    <tr key={`${price}-${color}`} className={(color === BID_COLOR) ? styles.rowBid : styles.rowAsk} style={{ backgroundColor: '#01101d', backgroundSize: getColorPercentage(totalSize, total) + "% " }} >
                         <RowOrder
-                            totalSize={totalSize}
                             cumulativeTotalSize={total}
-                            color={color}
                             price={price}
                             size={size}
                         />
@@ -51,7 +48,7 @@ export const OrderBook = () => {
             })
     }
 
-    const renderTable = (orderBook: ITransformedSocketData, color: string) => {
+    const renderTable = (totalSize: number, orders: TTransformedDictionaryOrder, color: string) => {
         return (
             <table className={styles.orderBookTable}>
                 <thead>
@@ -61,8 +58,8 @@ export const OrderBook = () => {
                         <th className={styles.head}>PRICE</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {renderOrderRow(orderBook.bids, orderBook.totalSize, color)}
+                <tbody style={{ backgroundColor: 'green' }}>
+                    {renderOrderRow(orders, totalSize, color)}
                 </tbody>
             </table>
         )
@@ -70,11 +67,14 @@ export const OrderBook = () => {
     return (
         <section>
             <h4 className={styles.header}>
-                Order Book
+                Order Book | {orderBook.ticker}
             </h4>
             <div className={styles.orderBook}>
-                {renderTable(orderBook, BID_COLOR)}
-                {renderTable(orderBook, ASK_COLOR)}
+                {renderTable(orderBook.totalSize, orderBook.bids, BID_COLOR)}
+                {renderTable(orderBook.totalSize, orderBook.asks, ASK_COLOR)}
+            </div>
+            <div className={styles.toggle}>
+                <button className={styles.toggleButton} onClick={toggleFeed}>Toggle Feed</button>
             </div>
         </section>
     )
