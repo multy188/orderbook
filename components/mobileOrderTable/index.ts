@@ -1,0 +1,1 @@
+export { MobileOrderTable } from './mobileOrderTable'

@@ -3,26 +3,15 @@ import { useEffect, useState } from "react"
 export const useDetectBackround = (): boolean => {
     const [isHidden, setHidden] = useState(false)
 
-    // Tab in Focus
-    const onFocus = () => {
-        console.log('Tab is in focus');
-        setHidden(false)
-    };
-
-    // Tab switched
-    const onBlur = () => {
-        console.log('Tab out');
-        setHidden(true)
+    const handleTabFocus = () => {
+        setHidden(document.hidden)
     };
 
     useEffect(() => {
-        window.addEventListener('focus', onFocus);
-        window.addEventListener('blur', onBlur);
-        // Specify how to clean up after this effect:
+        document.addEventListener('visibilitychange', handleTabFocus);
         return () => {
-            window.removeEventListener('focus', onFocus);
-            window.removeEventListener('blur', onBlur);
-        };
+            document.removeEventListener('visibilitychange', handleTabFocus);
+        }
     });
 
     return isHidden;

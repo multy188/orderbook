@@ -26,8 +26,8 @@ export const convertArrayOrderToDictionary = (rawOrderData: TRawOrder[], timeSta
     const orderDictionary: TDictionaryOrder = rawOrderData.reduce(
         (hashedOrder: TDictionaryOrder, currentRawOrder) => {
             const [price, size] = currentRawOrder;
-            hashedOrder[Math.floor(price)] = {
-                price: Math.floor(price),
+            hashedOrder[price] = {
+                price: price,
                 size,
                 timeStamp
             }

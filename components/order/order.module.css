@@ -11,13 +11,13 @@
     flex: 1;
 }
 
-.orderBook {
+.orderBookDesktop {
     display: flex;
     justify-content: center;
     flex-direction: row;
     width: 100%;
     overflow-y: hidden;
-    height: 85vh;
+    /* height: 85vh; */
 }
 
 .toggle {
@@ -26,7 +26,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 10vh;
+    margin-top: 20px;
 }
 
 .toggleButton {
@@ -41,8 +41,27 @@
 .connectButton {
     font-size: large;
     padding: 5px;
-    /* background-color: rgb(117, 84, 174); */
     border-radius: 5px;
     cursor: pointer;
-    /* color: white; */
+}
+
+
+/* for mobile screens */
+
+@media (min-width: 768px) {
+    .orderBookMobile {
+        display: none;
+    }
+}
+
+
+/* for desktop */
+
+@media (max-width: 768px) {
+    .orderBookDesktop {
+        display: none;
+    }
+    .spread {
+        display: none;
+    }
 }

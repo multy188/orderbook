@@ -1,5 +1,5 @@
 import { IRawSocketData, ITransformedSocketData, TRawOrder, IOrderStore, messages } from '../interfaces'
-import { strings, convertArrayOrderToDictionary, convertDictionaryOrderToArray, BITCOIN_TICKER, THROTLE_TIME } from '../utils'
+import { strings, convertArrayOrderToDictionary, convertDictionaryOrderToArray, BITCOIN_TICKER, THROTLE_TIME, NUMBER_OF_DISPLAYED_ORDER, WEBSOCKET_URL } from '../utils'
 
 export class FeedOrchestration {
     private feeds: WebSocket;
@@ -9,7 +9,7 @@ export class FeedOrchestration {
     private updatedDate: Date;
 
 
-    constructor(webSocketUrl = strings.WEBSOCKET_URL, ticker = BITCOIN_TICKER) {
+    constructor(webSocketUrl = WEBSOCKET_URL, ticker = BITCOIN_TICKER) {
         // initializing properties
         this.ticker = ticker;
         this.orderStore = {
@@ -83,7 +83,7 @@ export class FeedOrchestration {
         if (asks) {
             asks.forEach((ask) => {
                 const [price, size] = ask;
-                const floorPrice = Math.floor(price);
+                const floorPrice = price;
                 const existingPriceInStore = this.orderStore.asks[floorPrice];
 
                 // if price doesn't exist in store but there is a size with the new order, add order to store
@@ -110,7 +110,7 @@ export class FeedOrchestration {
         if (bids) {
             bids.forEach((bid) => {
                 const [price, size] = bid;
-                const floorPrice = Math.floor(price);
+                const floorPrice = price;
                 const existingPriceInStore = this.orderStore.bids[floorPrice];
 
                 // if price doesn't exist in store but there is a size with the new order, add order to store
@@ -163,8 +163,8 @@ export class FeedOrchestration {
 
     private transformRawOrder(asks: TRawOrder[], bids: TRawOrder[]) {
         // sorting orders
-        let sortedAsks = asks.sort((a, b) => a[0] - b[0]).slice(0, 35);
-        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse().slice(0, 35);
+        let sortedAsks = asks.sort((a, b) => a[0] - b[0]).slice(0, NUMBER_OF_DISPLAYED_ORDER);
+        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse().slice(0, NUMBER_OF_DISPLAYED_ORDER);
 
         const allBidsAndAsks = sortedAsks.concat(sortedBids);
 
