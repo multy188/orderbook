@@ -1,5 +1,5 @@
 import { IRawSocketData, ITransformedSocketData, TRawOrder, IOrderStore, messages } from '../interfaces'
-import { strings, convertArrayOrderToDictionary, convertDictionaryOrderToArray, sortOrderAndCalculateTotal, BITCOIN_TICKER, THROTLE_TIME } from '../utils'
+import { strings, convertArrayOrderToDictionary, convertDictionaryOrderToArray, BITCOIN_TICKER, THROTLE_TIME } from '../utils'
 
 export class FeedOrchestration {
     private feeds: WebSocket;
@@ -19,8 +19,8 @@ export class FeedOrchestration {
             product_id: "",
         };
         this.transformedOrderStore = {
-            bids: {},
-            asks: {},
+            bids: [],
+            asks: [],
             ticker: "",
             totalSize: 0
         };
@@ -148,7 +148,7 @@ export class FeedOrchestration {
         }
         this.transformedOrderStore = this.transformRawOrder(convertDictionaryOrderToArray(this.orderStore.asks), convertDictionaryOrderToArray(this.orderStore.bids));
 
-        // if it has been more than 3 seconds since we last posted a message, then post. This will help with throttling
+        // if it has been more than THROTLE_TIME since we last posted a message, then postMessage. This will help with throttling
         if (timeSubsequentOrderWasReceived > new Date(this.updatedDate.getTime() + THROTLE_TIME)) {
             // set new update time
             this.updatedDate = timeSubsequentOrderWasReceived;
@@ -170,7 +170,6 @@ export class FeedOrchestration {
             bids: convertArrayOrderToDictionary(bids, this.updatedDate)
         }
         this.transformedOrderStore = this.transformRawOrder(asks, bids);
-        console.log('.....................................store: ', this.transformedOrderStore)
         postMessage({
             type: messages.INITIAL_SNAPSHOT,
             data: this.transformedOrderStore
@@ -178,7 +177,13 @@ export class FeedOrchestration {
     }
 
     private transformRawOrder(asks: TRawOrder[], bids: TRawOrder[]) {
-        const allBidsAndAsks = asks.concat(bids);
+
+
+        // sorting orders
+        let sortedAsks = asks.sort((a, b) => a[0] - b[0]).slice(0, 25);
+        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse().slice(0, 25);
+
+        const allBidsAndAsks = sortedAsks.concat(sortedBids);
 
         //  calculate newOrderMaxSize 
         const newOrderMaxSize = allBidsAndAsks
@@ -186,16 +191,12 @@ export class FeedOrchestration {
             .map((orders) => orders[1])
             .reduce((totalOrderSize: number, currentOrderSize) => totalOrderSize + currentOrderSize);
 
-        let sortedAsks = asks.sort((a, b) => a[0] - b[0]);
-        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse();
-        console.log('???????????????????', sortedBids)
         const transformedData: ITransformedSocketData = {
             ticker: this.ticker,
             totalSize: newOrderMaxSize,
-            asks: sortOrderAndCalculateTotal(convertArrayOrderToDictionary(asks, new Date())),
-            bids: sortOrderAndCalculateTotal(convertArrayOrderToDictionary(sortedBids, new Date()), false)
+            asks: sortedAsks,
+            bids: sortedBids
         }
-        console.log('transformed comesfirst: ', transformedData)
         return transformedData;
     }
 
@@ -246,8 +247,8 @@ export class FeedOrchestration {
             product_id: "",
         };
         this.transformedOrderStore = {
-            bids: {},
-            asks: {},
+            bids: [],
+            asks: [],
             ticker: "",
             totalSize: 0
         };

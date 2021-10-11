@@ -1,14 +1,14 @@
 .header {
     border-bottom: 1px solid #777778;
-    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
 }
 
-.orderBookTable {
-    color: white;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+.spread {
+    color: #636669;
+    flex: 1;
 }
 
 .orderBook {
@@ -16,7 +16,7 @@
     justify-content: center;
     flex-direction: row;
     width: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
     height: 80vh;
 }
 
@@ -26,40 +26,14 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 20vh;
-    max-height: 100px;
+    height: 10vh;
 }
 
 .toggleButton {
     font-size: large;
-    padding: 10px;
+    padding: 5px;
     background-color: rgb(117, 84, 174);
     border-radius: 5px;
     cursor: pointer;
     color: white;
-}
-
-.heading {
-    font-weight: 400;
-    display: flex;
-}
-
-.head {
-    border-bottom: 1px solid #777778;
-    font-weight: 200;
-    flex: 1;
-    text-align: left;
-}
-
-.rowBid {
-    display: flex;
-    background-repeat: no-repeat;
-    background-position: 100% 100%;
-    background-image: linear-gradient(to right, rgb(31, 59, 31) 100%, rgb(31, 59, 31) 0%);
-}
-
-.rowAsk {
-    display: flex;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(to left, rgb(137, 52, 52) 100%, rgb(137, 52, 52) 0%);
 }

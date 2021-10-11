@@ -17,8 +17,8 @@ export interface IOrderStore {
 }
 
 export interface ITransformedSocketData {
-    bids: TTransformedDictionaryOrder
-    asks: TTransformedDictionaryOrder
+    bids: TRawOrder[]
+    asks: TRawOrder[]
     ticker: string
     totalSize: number
 }

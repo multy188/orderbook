@@ -23,3 +23,30 @@ a {
     justify-content: center;
     align-items: center;
 }
+
+.flex_1 {
+    flex: 1;
+}
+
+.bid_price_color {
+    color: var(--bid-color);
+}
+
+.ask_price_color {
+    color: var(--ask-color);
+}
+
+.heading_color {
+    color: var(--bid-color);
+}
+
+.total_color {
+    color: var(--bid-color);
+}
+
+:root {
+    --total-color: #c2c7cb;
+    --heading-color: #a1a6ab;
+    --ask-color: rgb(245, 0, 0);
+    --bid-color: rgb(0, 245, 0);
+}
