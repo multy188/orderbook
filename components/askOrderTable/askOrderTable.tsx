@@ -12,9 +12,9 @@ export const AskOrderTable = ({ totalSize, orders, color }: { totalSize: number,
             cumulativeTotalSize += size;
             return (
                 <tr key={`${price}-${color}`} className={(color === BID_COLOR) ? styles.rowBid : styles.rowAsk} style={{ backgroundColor: '#01101d', backgroundSize: getColorPercentage(totalSize, cumulativeTotalSize) + "% " }} >
-                    <td className='flex_1 ask_price_color' >{price}</td>
-                    <td className='flex_1' >{size}</td>
-                    <td className='flex_1 '>{cumulativeTotalSize}</td>
+                    <td className='flex_1 ask_price_color' >{price.toLocaleString()}</td>
+                    <td className='flex_1' >{size.toLocaleString()}</td>
+                    <td className='flex_1 '>{cumulativeTotalSize.toLocaleString()}</td>
                 </tr>
             )
         })

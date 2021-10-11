@@ -24,7 +24,7 @@ export class FeedOrchestration {
             ticker: "",
             totalSize: 0
         };
-        // this is a dummy dateto satisfy typescripts --strictPropertyInitialization. It will be overwritten when a snapshot or delta comes in
+        // this is a dummy date to satisfy typescripts --strictPropertyInitialization. It will be overwritten when a snapshot or delta comes in
         this.updatedDate = new Date();
         // create webSocket
         const socket = new WebSocket(webSocketUrl);
@@ -95,18 +95,12 @@ export class FeedOrchestration {
                     }
                 }
 
-                // if price exist in store but new size is 0, delete from store
-                else if (existingPriceInStore) {
-                    if (size === 0) {
-                        delete this.orderStore.asks[floorPrice]
-                    }
-                    // Price exist and size is not zero, update store
-                    else {
-                        this.orderStore.asks[floorPrice] = {
-                            price: floorPrice,
-                            size,
-                            timeStamp: timeSubsequentOrderWasReceived
-                        }
+                // if price exist in store and new order size is not 0, update store
+                else if (existingPriceInStore && size !== 0) {
+                    this.orderStore.asks[floorPrice] = {
+                        price: floorPrice,
+                        size: size + existingPriceInStore.size,
+                        timeStamp: timeSubsequentOrderWasReceived
                     }
                 }
             });
@@ -127,23 +121,14 @@ export class FeedOrchestration {
                         timeStamp: timeSubsequentOrderWasReceived
                     }
                 }
-
-                // if price exist in store but new size is 0, delete from store
-                else if (existingPriceInStore) {
-                    if (size === 0) {
-                        delete this.orderStore.bids[floorPrice]
-                    }
-                    // Price exist and size is not zero, update store
-                    else {
-                        this.orderStore.bids[floorPrice] = {
-                            price: floorPrice,
-                            size,
-                            timeStamp: timeSubsequentOrderWasReceived
-                        }
+                // if price exist in store and new bid order size is not 0, update store
+                else if (existingPriceInStore && size !== 0) {
+                    this.orderStore.bids[floorPrice] = {
+                        price: floorPrice,
+                        size: size + existingPriceInStore.size,
+                        timeStamp: timeSubsequentOrderWasReceived
                     }
                 }
-
-
             });
         }
         this.transformedOrderStore = this.transformRawOrder(convertDictionaryOrderToArray(this.orderStore.asks), convertDictionaryOrderToArray(this.orderStore.bids));
@@ -177,11 +162,9 @@ export class FeedOrchestration {
     }
 
     private transformRawOrder(asks: TRawOrder[], bids: TRawOrder[]) {
-
-
         // sorting orders
-        let sortedAsks = asks.sort((a, b) => a[0] - b[0]).slice(0, 25);
-        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse().slice(0, 25);
+        let sortedAsks = asks.sort((a, b) => a[0] - b[0]).slice(0, 35);
+        let sortedBids = bids.sort((a, b) => a[0] - b[0]).reverse().slice(0, 35);
 
         const allBidsAndAsks = sortedAsks.concat(sortedBids);
 
@@ -221,6 +204,34 @@ export class FeedOrchestration {
         this.ticker = ticker;
         this.feeds.send(JSON.stringify(subscriptionMessage));
     }
+
+    subscribe() {
+        console.log('subscribing');
+        // prepare new subscription message
+        const subscriptionMessage = {
+            event: "subscribe",
+            feed: "book_ui_1",
+            product_ids: [this.ticker],
+        };
+        this.feeds.send(JSON.stringify(subscriptionMessage));
+        postMessage({
+            type: messages.SUBSCRIBED
+        })
+    }
+
+    unSubscribe() {
+        // prepare new subscription message
+        const UnSubscriptionMessage = {
+            event: "unsubscribe",
+            feed: "book_ui_1",
+            product_ids: [this.ticker],
+        };
+        this.feeds.send(JSON.stringify(UnSubscriptionMessage));
+        postMessage({
+            type: messages.UNSUBSCRIBED
+        })
+    }
+
 
     closeSocket() {
         try {

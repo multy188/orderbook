@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import { useWorker } from '../../hooks'
+import React from 'react'
+import { useWorker, useDetectBackround } from '../../hooks'
 import { messages } from '../../interfaces'
-import { BITCOIN_TICKER, ETHEREUM_TICKER, ASK_COLOR, BID_COLOR, getColorPercentage } from '../../utils'
+import { BITCOIN_TICKER, ETHEREUM_TICKER, ASK_COLOR, BID_COLOR } from '../../utils'
 import { Loading, AskOrderTable, BidOrderTable } from '../'
 import styles from './order.module.css'
 
 export const OrderBook = () => {
-    const { feedWorker, isLoading, orderBook } = useWorker();
+    const { feedWorker, isLoading, orderBook, isSocketSubscribed } = useWorker();
+    const isHidden = useDetectBackround();
 
     if (isLoading) {
         <Loading isLoading={isLoading} />
     }
-
 
     // this is to toggle between Ethereum and bitcoin using feedWorker from useWorker Hook
     const toggleFeed = () => {
@@ -21,9 +21,16 @@ export const OrderBook = () => {
         })
     }
 
-    const unSubscribe = () => {
+    const subscribe = () => {
         feedWorker?.postMessage({
-            type: messages.CLOSE
+            type: messages.SUBSCRIBE
+        })
+    }
+
+    // Tab switched so unsubscribe
+    if (isHidden && isSocketSubscribed) {
+        feedWorker?.postMessage({
+            type: messages.UNSUBSCRIBE
         })
     }
 
@@ -42,7 +49,11 @@ export const OrderBook = () => {
                 <AskOrderTable totalSize={orderBook.totalSize} orders={orderBook.asks} color={ASK_COLOR} />
             </div>
             <div className={styles.toggle}>
-                <button className={styles.toggleButton} onClick={toggleFeed}>Toggle Feed</button>
+                {(isSocketSubscribed)
+                    ? <button className={styles.toggleButton} onClick={toggleFeed}>Toggle Feed</button>
+                    : < p > Feed was disconnected when Tab was switched. This is to reduce data usage. Click <button className={styles.connectButton} onClick={subscribe} >Here</button> to reconnect. </p>
+
+                }
             </div>
         </section>
     )

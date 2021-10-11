@@ -17,7 +17,7 @@
     flex-direction: row;
     width: 100%;
     overflow-y: hidden;
-    height: 80vh;
+    height: 85vh;
 }
 
 .toggle {
@@ -36,4 +36,13 @@
     border-radius: 5px;
     cursor: pointer;
     color: white;
+}
+
+.connectButton {
+    font-size: large;
+    padding: 5px;
+    /* background-color: rgb(117, 84, 174); */
+    border-radius: 5px;
+    cursor: pointer;
+    /* color: white; */
 }

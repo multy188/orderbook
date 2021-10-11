@@ -9,8 +9,15 @@ onmessage = (event: MessageEvent) => {
             break
         }
         case messages.TOGGLE_FEED: {
-            console.log('didyou.................')
             feedOrchestration.toggleFeed(event.data.ticker);
+            break
+        }
+        case messages.SUBSCRIBE: {
+            feedOrchestration.subscribe();
+            break
+        }
+        case messages.UNSUBSCRIBE: {
+            feedOrchestration.unSubscribe();
             break
         }
         default:
