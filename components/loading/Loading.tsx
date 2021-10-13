@@ -1,10 +1,5 @@
 import React from 'react'
 
-export const Loading = ({ isLoading }: { isLoading: boolean }) => {
-    return (
-        isLoading
-            ? <h4 className='center'>Loading...</h4>
-            : null
-    )
-
+export const Loading = () => {
+    return <h4 data-testid='loading' className='center'>Loading...</h4>
 }

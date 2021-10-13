@@ -4,7 +4,6 @@ import { BID_COLOR, getColorPercentage } from '../../utils'
 import styles from '../orderTable.module.css'
 
 export const AskOrderTable = ({ totalSize, orders, color }: { totalSize: number, orders: TRawOrder[], color: string }) => {
-
     const renderOrderRow = () => {
         let cumulativeTotalSize = 0
         return orders.map((order) => {
@@ -12,7 +11,7 @@ export const AskOrderTable = ({ totalSize, orders, color }: { totalSize: number,
             cumulativeTotalSize += size;
             return (
                 <tr key={`${price}-${color}`} className={(color === BID_COLOR) ? styles.rowBid : styles.rowAsk} style={{ backgroundColor: '#01101d', backgroundSize: getColorPercentage(totalSize, cumulativeTotalSize) + "% " }} >
-                    <td className='flex_1 ask_price_color' >{price.toLocaleString()}</td>
+                    <td data-testid={price} className='flex_1 ask_price_color' >{price.toLocaleString()}</td>
                     <td className='flex_1' >{size.toLocaleString()}</td>
                     <td className='flex_1 '>{cumulativeTotalSize.toLocaleString()}</td>
                 </tr>

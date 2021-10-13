@@ -57,5 +57,5 @@ export const getColorPercentage = (totalSize: number, cumulativeTotalSize: numbe
     // Since percentage cant be less than 0 or greater than 100, i am  getting min and max
     percentageColor = Math.min(percentageColor, 100);
     percentageColor = Math.max(percentageColor, 0);
-    return percentageColor;
+    return percentageColor.toFixed(2);
 }

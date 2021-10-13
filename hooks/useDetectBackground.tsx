@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export const useDetectBackround = (): boolean => {
+export const useDetectBackground = (): boolean => {
     const [isHidden, setHidden] = useState(false)
 
     const handleTabFocus = () => {
@@ -12,7 +12,7 @@ export const useDetectBackround = (): boolean => {
         return () => {
             document.removeEventListener('visibilitychange', handleTabFocus);
         }
-    });
+    }, []);
 
     return isHidden;
 }

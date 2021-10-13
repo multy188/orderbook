@@ -67,7 +67,14 @@ export class FeedOrchestration {
                 }
             }
         }
+
         this.feeds = socket;
+
+        // In order to keep the websocket connection alive, ping request at least every 60 seconds.
+        setInterval(() => {
+            if (!this.feeds || this.feeds.readyState !== 1) return;
+            this.feeds.send("ping");
+        }, 30000);
     }
 
     // Processing subsequent delta messages after initial snapshot
@@ -206,7 +213,6 @@ export class FeedOrchestration {
     }
 
     subscribe() {
-        console.log('subscribing');
         // prepare new subscription message
         const subscriptionMessage = {
             event: "subscribe",
@@ -231,7 +237,6 @@ export class FeedOrchestration {
             type: messages.UNSUBSCRIBED
         })
     }
-
 
     closeSocket() {
         try {

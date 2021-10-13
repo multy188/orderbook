@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { IUseWorker, ITransformedSocketData, messages } from '../interfaces'
-import { strings } from '../utils';
 
 export const useWorker = (): IUseWorker => {
     const [isLoading, setLoading] = useState(true);
@@ -37,18 +36,6 @@ export const useWorker = (): IUseWorker => {
                 default:
                     break;
             }
-            // // data recieved is either initial snapshot or subsequent delta
-            // if ((event.data.type === messages.INITIAL_SNAPSHOT) || event.data.type === messages.ORDER) {
-            //     const transformedOrder: ITransformedSocketData = event.data.data;
-
-            //     setOrderBook(Object.freeze(transformedOrder));
-
-            //     !isSocketSubscribed && setSocketSubscribed(true)
-            // } else if (event.data.type === messages.UNSUBSCRIBED) {
-            //     // After socket unsubscribed, update isSocketSubscribe to false
-            //     setSocketSubscribed(false)
-            //     console.log(strings.UNSUBSCRIBE);
-            // }
         }
         setLoading(false);
     }, [])

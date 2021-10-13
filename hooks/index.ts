@@ -1,2 +1,2 @@
 export { useWorker } from './useWorker'
-export { useDetectBackround } from './useDetectBackground'
+export { useDetectBackground } from './useDetectBackground'

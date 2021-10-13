@@ -1,11 +1,11 @@
 
-import { orderDictionary, transformedDictionaryOrder, rawOrderData, rawOrderData1 } from '../../__mocks'
-import { convertArrayOrderToDictionary, sortOrderAndCalculateTotal, convertDictionaryOrderToArray } from '../utilities'
+import { orderDictionary, transformedDictionaryOrder, rawOrderData, rawOrderData1 } from '../../__mocks__'
+import { convertArrayOrderToDictionary, getColorPercentage, convertDictionaryOrderToArray } from '../utilities'
 
 describe('Utilities', () => {
-    test('sortOrderAndCalculateTotal', () => {
-        const transformed = sortOrderAndCalculateTotal(orderDictionary(new Date()))
-        expect(transformed).toEqual(transformedDictionaryOrder)
+    test('getColorPercentage', () => {
+        const percent = getColorPercentage(44800, 900)
+        expect(percent).toEqual("2.01")
     })
 
     test('convertArrayOrderToDictionary', () => {

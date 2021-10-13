@@ -1,5 +1,5 @@
 import React from 'react'
-import { useWorker, useDetectBackround } from '../../hooks'
+import { useWorker, useDetectBackground } from '../../hooks'
 import { messages } from '../../interfaces'
 import { BITCOIN_TICKER, ETHEREUM_TICKER, ASK_COLOR, BID_COLOR } from '../../utils'
 import { Loading, AskOrderTable, BidOrderTable, MobileOrderTable } from '../'
@@ -7,10 +7,9 @@ import styles from './order.module.css'
 
 export const OrderBook = () => {
     const { feedWorker, isLoading, orderBook, isSocketSubscribed } = useWorker();
-    const isHidden = useDetectBackround();
-
+    const isHidden = useDetectBackground();
     if (isLoading) {
-        <Loading isLoading={isLoading} />
+        return <Loading />
     }
 
     // this is to toggle between Ethereum and bitcoin using feedWorker from useWorker Hook
@@ -43,7 +42,7 @@ export const OrderBook = () => {
             {/* Heading and Spread */}
             <div className={styles.header}>
                 <p className='flex_1'>Order Book | {orderBook.ticker}</p>
-                <p className={styles.spread}>Spread {(orderBook.asks[0][0] - orderBook.bids[0][0]).toLocaleString()}</p>
+                <p className={styles.spread} data-testid='spread'>Spread {(orderBook.asks[0][0] - orderBook.bids[0][0]).toLocaleString()}</p>
             </div>
 
             {/* Desktop view order table */}
@@ -66,7 +65,7 @@ export const OrderBook = () => {
             {/* Action buttons */}
             <div className={styles.toggle}>
                 {(isSocketSubscribed)
-                    ? <button className={styles.toggleButton} onClick={toggleFeed}>Toggle Feed</button>
+                    ? <button className={styles.toggleButton} data-testid='toggle' onClick={toggleFeed}>Toggle Feed</button>
                     : < p > Feed was disconnected when Tab was switched. This is to reduce data usage. Click <button className={styles.connectButton} onClick={subscribe} >Here</button> to reconnect. </p>
                 }
             </div>
